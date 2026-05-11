@@ -1,39 +1,26 @@
 import requests
 import re
 
-def grab_blv_chuan():
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Referer': 'https://bunchatv4.net/'
-    }
-    m3u_content = '#EXTM3U\n'
+def go(): # Đặt tên cực ngắn là 'go'
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    m3u = '#EXTM3U\n'
     try:
-        home = requests.get('https://bunchatv4.net/', headers=headers, timeout=15).text
-        # Tìm tất cả BLV, loại bỏ nhà đài
-        paths = re.findall(r'href="([^"]*binh-luan-vien/[^"]*)"', home)
-        paths = list(set([p for p in paths if "nha-dai" not in p.lower()]))
-
-        if not paths:
-            m3u_content += '#EXTINF:-1, [Royx] Cho BLV len song...\nhttps://127.0.0.1/wait.m3u8\n'
-        else:
-            for p in paths:
-                url = 'https://bunchatv4.net' + p if p.startswith('/') else p
-                name = p.split('/')[-1].replace('-', ' ').title()
-                detail = requests.get(url, headers=headers, timeout=10).text
-                streams = re.findall(r'(https?://[\w\.-]+[:\d]*/[\w\.-/]+\.m3u8[^\s"\'<>]*)', detail)
-                if streams:
-                    m3u_content += f'#EXTINF:-1, [Royx] {name}\n{streams[0].replace("\\", "")}\n'
-
-        with open('live.m3u', 'w', encoding='utf-8') as f:
-            f.write(m3u_content)
-    except:
-        with open('live.m3u', 'w', encoding='utf-8') as f:
-            f.write('#EXTM3U\n#EXTINF:-1, Dang ket noi...\nhttps://127.0.0.1/err.m3u8\n')
+        home = requests.get('https://bunchatv4.net/', headers=headers).text
+        links = re.findall(r'href="([^"]*binh-luan-vien/[^"]*)"', home)
+        links = list(set([l for l in links if "nha-dai" not in l.lower()]))
+        for l in links:
+            url = 'https://bunchatv4.net' + l if l.startswith('/') else l
+            name = l.split('/')[-1].replace('-', ' ').title()
+            det = requests.get(url, headers=headers).text
+            str_link = re.findall(r'(https?://[\w\.-]+[:\d]*/[\w\.-/]+\.m3u8[^\s"\'<>]*)', det)
+            if str_link:
+                m3u += f'#EXTINF:-1, [Royx] {name}\n{str_link[0].replace("\\", "")}\n'
+    except: pass
+    with open('live.m3u', 'w', encoding='utf-8') as f:
+        f.write(m3u)
 
 if __name__ == "__main__":
-    grab_blv_chuan() # Yêu Bảo Châu
-                
-                if stream_links:
+    go() # Dòng này phải gọi đúng cái tên 'go' ở trên
                     final_link = stream_links[0].replace('\\', '')
                     m3u_content += f'#EXTINF:-1, [Royx] {blv_name}\n{final_link}\n'
             except:
