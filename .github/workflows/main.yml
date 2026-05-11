@@ -1,0 +1,19 @@
+name: AutoRio
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip install requests
+      - run: python grab.py
+      - name: Push
+        run: |
+          git config --global user.name "ManhDZ"
+          git config --global user.email "manh@dz.com"
+          git add live.m3u
+          git commit -m "Update" || exit 0
+          git push
