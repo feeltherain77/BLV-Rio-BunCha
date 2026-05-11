@@ -54,8 +54,5 @@ def grab_all_blv():
             f.write(f'#EXTM3U\n#EXTINF:-1, Loi ket noi: {str(e)}\nhttps://127.0.0.1/error.m3u8')
 
 if __name__ == "__main__":
-    grab_all_blv()
-
-if __name__ == "__main__":
-    result = get_rio_link()
-    print(result)
+    grab_all_blv() # Phải gọi đúng tên hàm đã đặt ở trên đầu file
+    
