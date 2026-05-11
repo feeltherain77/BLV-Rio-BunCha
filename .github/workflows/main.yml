@@ -1,11 +1,12 @@
 name: AutoRio
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/5 * * * *' # Tôi để 5 phút cho an toàn nhé
   workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Dòng này là chìa khóa để phá lỗi 128 đây:
     permissions:
       contents: write
     steps:
@@ -14,8 +15,8 @@ jobs:
       - run: python grab.py
       - name: Push
         run: |
-          git config --global user.name "ManhDZ"
-          git config --global user.email "manh@dz.com"
+          git config --global user.name "feeltherain77"
+          git config --global user.email "feeltherain77@users.noreply.github.com"
           git add live.m3u
-          git commit -m "Update link" || exit 0
+          git commit -m "Update" || exit 0
           git push
