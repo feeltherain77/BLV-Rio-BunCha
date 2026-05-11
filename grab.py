@@ -1,21 +1,20 @@
 import requests
 import re
 
-def grab_all_blv():
+def grab_blv_chuan():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         'Referer': 'https://bunchatv4.net/'
     }
     m3u_content = '#EXTM3U\n'
     try:
-        # Quét trang chủ
         home = requests.get('https://bunchatv4.net/', headers=headers, timeout=15).text
-        # Tìm link BLV, bỏ qua nhà đài
+        # Tìm tất cả BLV, loại bỏ nhà đài
         paths = re.findall(r'href="([^"]*binh-luan-vien/[^"]*)"', home)
         paths = list(set([p for p in paths if "nha-dai" not in p.lower()]))
 
         if not paths:
-            m3u_content += '#EXTINF:-1, Dang cho cac BLV len song...\nhttps://127.0.0.1/wait.m3u8'
+            m3u_content += '#EXTINF:-1, [Royx] Cho BLV len song...\nhttps://127.0.0.1/wait.m3u8\n'
         else:
             for p in paths:
                 url = 'https://bunchatv4.net' + p if p.startswith('/') else p
@@ -28,12 +27,11 @@ def grab_all_blv():
         with open('live.m3u', 'w', encoding='utf-8') as f:
             f.write(m3u_content)
     except:
-        with open('live.m3u', 'w') as f:
-            f.write('#EXTM3U\n#EXTINF:-1, Dang ket noi...\nhttps://127.0.0.1/err.m3u8')
+        with open('live.m3u', 'w', encoding='utf-8') as f:
+            f.write('#EXTM3U\n#EXTINF:-1, Dang ket noi...\nhttps://127.0.0.1/err.m3u8\n')
 
 if __name__ == "__main__":
-    grab_all_blv() # Nhớ là tên này phải giống tên hàm ở trên
-                stream_links = re.findall(r'(https?://[\w\.-]+[:\d]*/[\w\.-/]+\.m3u8[^\s"\'<>]*)', detail_res.text)
+    grab_blv_chuan() # Yêu Bảo Châu
                 
                 if stream_links:
                     final_link = stream_links[0].replace('\\', '')
