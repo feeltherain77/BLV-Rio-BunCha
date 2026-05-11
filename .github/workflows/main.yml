@@ -6,8 +6,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: pip install requests
       - run: python grab.py
       - name: Push
@@ -15,5 +17,5 @@ jobs:
           git config --global user.name "ManhDZ"
           git config --global user.email "manh@dz.com"
           git add live.m3u
-          git commit -m "Update" || exit 0
+          git commit -m "Update link" || exit 0
           git push
